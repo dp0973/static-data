@@ -1,6 +1,13 @@
 # Static-data
 A Python module for those tired of handling ddragon files to get champion/items names/images for League of Legends.
 
+To install, run : 
+```
+pip3 install static-data
+```
+
+OR
+
 Download and run 
 ```
 python setup.py install
