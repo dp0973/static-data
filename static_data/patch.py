@@ -49,11 +49,11 @@ class Patch():
         
         return version
         
-    def getLastVersion(self):
-        return self.lastVersion
-        
-    def getVersion(self, versionNumber):
-        return self.versions[versionNumber]
+    def getVersion(self, versionNumber=None):
+        if versionNumber == None:
+            return self.lastVersion
+        else:
+            return self.versions[versionNumber]
     
     def getString(self):
         return "{}.{}".format(self.season.getString(), self.patchNumber)
@@ -97,15 +97,12 @@ class Season():
         self.patches[patchNumber] = patch
         
         return patch
-        
-    def getLastPatch(self):
-        return self.lastPatch
     
-    def getPatch(self, patchNumber):
-        return self.patches[patchNumber]
-    
-    def getLastVersion(self):
-        return self.lastPatch.getLastVersion()
+    def getPatch(self, patchNumber=None):
+        if patchNumber==None:
+            return self.lastPatch
+        else:
+            return self.patches[patchNumber]
         
     def getString(self):
         return "{}".format(self.seasonNumber)
@@ -144,28 +141,12 @@ class PatchManager():
             
             self.addSeason(season).addPatch(patch).addVersion(version)
         
-    #The only function you need here
-    def getLatestVersion(self):
-        return self.getLastSeason().getLastVersion().getString()
-    
+    #The only two functions you need here
     def getVersionFromGameVersion(self, gameVersion):
-        return self.getSeason(int(gameVersion.split(".")[0])).getPatch(int(gameVersion.split(".")[1])).getLastVersion().getString()
+        return self.getSeason(int(gameVersion.split(".")[0])).getPatch(int(gameVersion.split(".")[1])).getVersion().getString()
     
     def getVersion(self, season=None, patch=None, version=None):
-        if season == None:
-            s = self.getLastSeason()
-        else:
-            s = self.getSeason(season)
-            
-        if patch == None:
-            p = s.getLastPatch()
-        else:
-            p = s.getPatch(patch)
-            
-        if version == None:
-            return p.getLastVersion().getString()
-        else:
-            return p.getVersion(version).getString()
+        return self.getSeason(season).getPatch(patch).getVersion(version).getString()
         
     def addSeason(self, seasonNumber):
         seasonNumber = int(seasonNumber)
@@ -181,12 +162,12 @@ class PatchManager():
         self.seasons[seasonNumber] = season
         
         return season
-    
-    def getLastSeason(self):
-        return self.lastSeason
             
-    def getSeason(self, seasonNumber):
-        return self.seasons[seasonNumber]
+    def getSeason(self, seasonNumber=None):
+        if seasonNumber==None:
+            return self.lastSeason
+        else:
+            return self.seasons[seasonNumber]
                 
             
             
