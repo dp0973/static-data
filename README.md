@@ -22,6 +22,9 @@ print(dd.getChampion("Annie").image)
 print(dd.getChampion(1).image)
 print(dd.getChampion(1).name)
 
+print(dd.getChampion("Annie").spell("Q").image)
+print(dd.getChampion("Annie").spell(1).image)
+
 print(dd.getSummoner("Flash").image)
 #Change the patch to number 4, others settings (season and version) will be set at their last one)
 dd.setVersion(patch=4)
@@ -32,7 +35,9 @@ For now, it only corresponds to my use cases, where I need to get name or image 
 
 Feel free to ask for more.
 
-Version : 
+Versions : 
+ * 0.3.0 : 
+     * Added champion spells and icons
 
  * 0.2.0 : 
  	 * Added summoners spells and maps

@@ -3,7 +3,7 @@ from enum import Enum
 
 from .patch import PatchManager
 
-from .DataStore import Champion, Item, Map, Summoner
+from .DataStore import Champion, Item, Map, Summoner, Icon
 
 class ddragonFiles(Enum):
     champions="champion.json"
@@ -11,13 +11,15 @@ class ddragonFiles(Enum):
     items="item.json"
     maps="map.json"
     summoners="summoner.json"
+    icons="profileicon.json"
 
 class ddragon():
     
     BASE_URL = "http://ddragon.leagueoflegends.com/cdn/"
     
-    def __init__(self, load=True, language="en_US"):
+    def __init__(self, load=True, language="en_US", championFull=True):
         self.language = language
+        self.championFull = championFull
         
         self.version=None
         self.pm = None
@@ -35,17 +37,23 @@ class ddragon():
         self.loadAll()
             
     def loadAll(self):
-        self.load(ddragonFiles.champions)
+        if self.championFull:
+            self.load(ddragonFiles.championsFull)
+        else:
+            self.load(ddragonFiles.champions)
+            
+        
         self.load(ddragonFiles.items)
         self.load(ddragonFiles.maps)
         self.load(ddragonFiles.summoners)
+        self.load(ddragonFiles.icons)
     
     
     def load(self, file):
         
         data = requests.get(self.BASE_URL + self.version + "/data/" + self.language +"/" + file.value).json()
         
-        if file == ddragonFiles.champions:
+        if file == ddragonFiles.champions or file == ddragonFiles.championsFull:
             self.championById = {}
             self.championByName = {}
             
@@ -89,6 +97,15 @@ class ddragon():
                 self.summonersById[int(data["data"][s]["key"])] = summ
                 self.summonersByName[data["data"][s]["name"]] = summ
                 
+        if file == ddragonFiles.icons:
+            self.iconsById = {}
+            
+            for i in data["data"]:
+                icon = Icon(data["data"][i])
+                icon.setImageUrl(self.BASE_URL+ self.version + "/img/")
+                
+                self.iconsById[int(i)] = icon
+                
     def getChampion(self, champion):
         if isinstance(champion, int) or champion.isdigit():
             return self.championById[int(champion)]
@@ -112,3 +129,6 @@ class ddragon():
             return self.summonersById[int(s)]
         else:
             return self.summonersByName[s]
+        
+    def getIcon(self, icon):
+        return self.iconsById[int(icon)]
