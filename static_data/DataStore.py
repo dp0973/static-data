@@ -82,4 +82,19 @@ class Icon(DataStore):
     
 class Spell(DataStore):
     pass
+
+class Rune():
     
+    def __init__(self, data):
+        self.data = data
+        
+    def setImageUrl(self, imageUrl):
+        self.imageUrl = imageUrl
+        
+    @property
+    def image(self):
+        return self.imageUrl +self.data["icon"]
+    
+    @property
+    def name(self):
+        return self.data["name"]

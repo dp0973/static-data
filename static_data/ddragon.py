@@ -3,7 +3,7 @@ from enum import Enum
 
 from .patch import PatchManager
 
-from .DataStore import Champion, Item, Map, Summoner, Icon
+from .DataStore import Champion, Item, Map, Summoner, Icon, Rune
 
 class ddragonFiles(Enum):
     champions="champion.json"
@@ -12,6 +12,7 @@ class ddragonFiles(Enum):
     maps="map.json"
     summoners="summoner.json"
     icons="profileicon.json"
+    runes="runesReforged.json"
 
 class ddragon():
     
@@ -47,6 +48,7 @@ class ddragon():
         self.load(ddragonFiles.maps)
         self.load(ddragonFiles.summoners)
         self.load(ddragonFiles.icons)
+        self.load(ddragonFiles.runes)
     
     
     def load(self, file):
@@ -105,6 +107,19 @@ class ddragon():
                 icon.setImageUrl(self.BASE_URL+ self.version + "/img/")
                 
                 self.iconsById[int(i)] = icon
+        
+        if file == ddragonFiles.runes:
+            self.runesById = {}
+            self.runesByName = {}
+            
+            for tree in data:
+                for slot in tree["slots"]:
+                    for r in slot["runes"]:
+                        rune = Rune(r)
+                        rune.setImageUrl(self.BASE_URL+ "img/")
+
+                        self.runesById[int(r["id"])] = rune
+                        self.runesByName[r["name"]] = rune
                 
     def getChampion(self, champion):
         if isinstance(champion, int) or champion.isdigit():
@@ -132,3 +147,9 @@ class ddragon():
         
     def getIcon(self, icon):
         return self.iconsById[int(icon)]
+    
+    def getRune(self, r):
+        if isinstance(r, int) or r.isdigit():
+            return self.runesById[int(r)]
+        else:
+            return self.runesByName[r]

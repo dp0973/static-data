@@ -36,6 +36,9 @@ For now, it only corresponds to my use cases, where I need to get name or image 
 Feel free to ask for more.
 
 Versions : 
+ * 0.4.0 : 
+     * Added runes reforged and fixed icons
+
  * 0.3.0 : 
      * Added champion spells and icons
 
