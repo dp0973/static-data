@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 setup(
   name = 'static_data',
   packages = find_packages(),
-  version = '0.4.0',
+  version = '0.7.0',
   description = 'Library to easily handles ddragon ressources files for League of Legends',
   author = 'Canisback',
   author_email = 'canisback@gmail.com',

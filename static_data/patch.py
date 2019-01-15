@@ -1,4 +1,4 @@
-import requests
+import requests, json
 
 class Version():
     
@@ -124,16 +124,21 @@ class Season():
     
 class PatchManager():
     
-    def __init__(self):
+    def __init__(self, localVersions):
         self.seasons = {}
         self.lastSeason = None
+        self.localVersions = localVersions
         
         self.getVersions()
         
         
     def getVersions(self):
-        r = requests.get("http://ddragon.leagueoflegends.com/api/versions.json").json()
-        
+        if self.localVersions == None:
+            r = requests.get("http://ddragon.leagueoflegends.com/api/versions.json").json()
+        else:
+            with open(self.localVersions, "r") as f:
+                r = json.load(f)
+                
         for v in r:
             if not v.split(".")[0].isdigit():
                 break

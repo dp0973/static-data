@@ -29,6 +29,10 @@ print(dd.getSummoner("Flash").image)
 #Change the patch to number 4, others settings (season and version) will be set at their last one)
 dd.setVersion(patch=4)
 print(dd.getSummoner("Flash").image)
+
+#ddragon can be initlized like this : 
+dd = ddragon.ddragon(baseUrl="http://ddragon.canisback.com/")
+#It will use this url instead of ddragon.leagueoflegends.com ones
 ```
 
 For now, it only corresponds to my use cases, where I need to get name or image from champion or item having its name or id.
@@ -36,6 +40,18 @@ For now, it only corresponds to my use cases, where I need to get name or image 
 Feel free to ask for more.
 
 Versions : 
+ * 0.7.0 : 
+     * Added an internal cache to use data already called instead of calling it again.
+     * Pruned the data to keep only what is useed to save some space in cache.
+     * Made ddragon a Singleton.
+     
+ * 0.6.0 : 
+     * Allows to use a local directory (where are stored unziped dragontail files) instead of calling ddragon cdn.
+     * Allows to use a local file for versions instead of calling ddragon.leagueoflegends.com/api/versions.json
+     
+ * 0.5.0 : 
+     * Allows to change the base url in the constructor
+
  * 0.4.0 : 
      * Added runes reforged and fixed icons
 

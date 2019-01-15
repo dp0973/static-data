@@ -1,7 +1,10 @@
 class DataStore():
     
     def __init__(self, data):
-        self.data = data
+        self.data = {
+            "image" : data["image"],
+            "name" : data["name"]
+        }
         
     def setImageUrl(self, imageUrl):
         self.imageUrl = imageUrl
@@ -31,7 +34,19 @@ class Champion(DataStore):
     BASE_URL = "http://ddragon.leagueoflegends.com/cdn/"
     
     def __init__(self, data):
-        self.data = data
+        self.data = {
+            "image" : data["image"],
+            "name" : data["name"],
+            "spells" : [
+                {
+                    "image":s["image"],
+                    "name":s["name"],
+                    "id":s["id"]
+                } for s in data["spells"]
+            ]
+        }
+        
+        self.spellById = None
         if "spells" in self.data:
             self.loadSpells()
             
@@ -60,25 +75,32 @@ class Champion(DataStore):
             
     def setImageUrl(self, imageUrl):
         self.imageUrl = imageUrl
-        for s in self.spellById:
-            self.spellById[s].setImageUrl(imageUrl)
+        if not self.spellById == None:
+            for s in self.spellById:
+                self.spellById[s].setImageUrl(imageUrl)
             
 
 class Item(DataStore):
     pass
 
 class Map(DataStore):
-    @property
-    def name(self):
-        return self.data["MapName"]
+    
+    def __init__(self, data):
+        self.data = {
+            "image" : data["image"],
+            "name" : data["MapName"]
+        }
 
 class Summoner(DataStore):
     pass
 
 class Icon(DataStore):
-    @property
-    def name(self):
-        return None
+    
+    def __init__(self, data):
+        self.data = {
+            "image" : data["image"],
+            "name" : None
+        }
     
 class Spell(DataStore):
     pass
@@ -86,7 +108,10 @@ class Spell(DataStore):
 class Rune():
     
     def __init__(self, data):
-        self.data = data
+        self.data = {
+            "icon" : data["icon"],
+            "name" : data["name"]
+        }
         
     def setImageUrl(self, imageUrl):
         self.imageUrl = imageUrl
