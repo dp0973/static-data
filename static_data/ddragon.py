@@ -44,12 +44,15 @@ class ddragon(metaclass=Singleton):
         if load:
             self.setVersion()
             
-    def setVersion(self, season=None, patch=None, version=None):
+    def setVersion(self, season=None, patch=None, version=None, gameVersion=None):
         if season==None or patch==None or version==None:
             if self.pm == None:
                 self.pm = PatchManager(self.LOCAL_VERSIONS)
-                
-            self.version = self.pm.getVersion(season, patch, version)
+            
+            if gameVersion == None:
+                self.version = self.pm.getVersion(season, patch, version)
+            else:
+                self.version = self.pm.getVersionFromGameVersion(gameVersion)
         else:
             self.version = "{}.{}.{}".format(season,patch,version)
         self.loadAll()
@@ -180,6 +183,12 @@ class ddragon(metaclass=Singleton):
             self.runesByName = {}
             
             for tree in data:
+                rune = Rune(data)
+                rune.setImageUrl(self.BASE_URL+ "img/")
+                
+                self.runesById[int(data["id"])] = rune
+                self.runesByName[data["name"]] = rune
+                        
                 for slot in tree["slots"]:
                     for r in slot["runes"]:
                         rune = Rune(r)
@@ -227,4 +236,9 @@ class ddragon(metaclass=Singleton):
     def withVersion(self, season=None, patch=None, version=None):
         inst = copy.copy(self)
         inst.setVersion(season, patch, version)
+        return inst
+        
+    def withGameVersion(self, gameVersion):
+        inst = copy.copy(self)
+        inst.setVersion(gameVersion=gameVersion)
         return inst

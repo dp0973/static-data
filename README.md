@@ -40,6 +40,9 @@ For now, it only corresponds to my use cases, where I need to get name or image 
 Feel free to ask for more.
 
 Versions : 
+ * 0.8.0 : 
+     * Added rune roots (Domination, Precision...) as simple runes.
+     
  * 0.7.0 : 
      * Added an internal cache to use data already called instead of calling it again.
      * Pruned the data to keep only what is useed to save some space in cache.
