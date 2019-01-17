@@ -183,11 +183,11 @@ class ddragon(metaclass=Singleton):
             self.runesByName = {}
             
             for tree in data:
-                rune = Rune(data)
+                rune = Rune(tree)
                 rune.setImageUrl(self.BASE_URL+ "img/")
                 
-                self.runesById[int(data["id"])] = rune
-                self.runesByName[data["name"]] = rune
+                self.runesById[int(tree["id"])] = rune
+                self.runesByName[tree["name"]] = rune
                         
                 for slot in tree["slots"]:
                     for r in slot["runes"]:

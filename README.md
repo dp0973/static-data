@@ -40,6 +40,8 @@ For now, it only corresponds to my use cases, where I need to get name or image 
 Feel free to ask for more.
 
 Versions : 
+ * 0.8.1 : 
+     * Fixed the 0.8.0 error.
  * 0.8.0 : 
      * Added rune roots (Domination, Precision...) as simple runes.
      
