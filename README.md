@@ -16,8 +16,10 @@ python setup.py install
 Use : 
 
 ```python
-from static_data import ddragon
-dd = ddragon.ddragon()
+import static_data
+
+dd = static_data.ddragon()
+
 print(dd.getChampion("Annie").image)
 print(dd.getChampion(1).image)
 print(dd.getChampion(1).name)
