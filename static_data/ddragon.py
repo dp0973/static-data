@@ -1,6 +1,8 @@
 import requests, json
 from enum import Enum
 import copy
+import asyncio
+import aiohttp
 
 from .patch import PatchManager
 
@@ -45,6 +47,7 @@ class ddragon(metaclass=Singleton):
             self.setVersion()
             
     def setVersion(self, season=None, patch=None, version=None, gameVersion=None):
+        
         if season==None or patch==None or version==None:
             if self.pm == None:
                 self.pm = PatchManager(self.LOCAL_VERSIONS)
@@ -58,20 +61,38 @@ class ddragon(metaclass=Singleton):
         self.loadAll()
             
     def loadAll(self):
+        
+        loop = asyncio.get_event_loop()
+        asyncio.set_event_loop(loop)
+        
         if self.championFull:
-            self.load(ddragonFiles.championsFull)
+            tasks =  [asyncio.ensure_future(self.load(ddragonFiles.championsFull))]
         else:
-            self.load(ddragonFiles.champions)
+            tasks =  [asyncio.ensure_future(self.load(ddragonFiles.champions))]
             
         
-        self.load(ddragonFiles.items)
-        self.load(ddragonFiles.maps)
-        self.load(ddragonFiles.summoners)
-        self.load(ddragonFiles.icons)
-        self.load(ddragonFiles.runes)
+        tasks += [
+            asyncio.ensure_future(self.load(ddragonFiles.items)),
+            asyncio.ensure_future(self.load(ddragonFiles.maps)),
+            asyncio.ensure_future(self.load(ddragonFiles.summoners)),
+            asyncio.ensure_future(self.load(ddragonFiles.icons)),
+            asyncio.ensure_future(self.load(ddragonFiles.runes))
+        ]
+        
+        loop.run_until_complete(asyncio.gather(*tasks))
+        
     
+    async def get_data(self, file):
+        if self.LOCAL_DIRECTORY == None:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(self.BASE_URL + self.version + "/data/" + self.language +"/" + file.value) as response:
+                    return await response.json()
+        else:
+            with open(self.LOCAL_DIRECTORY + self.version + "/data/" + self.language +"/" + file.value, "r") as f:
+                return json.load(f)
+            
     
-    def load(self, file):
+    async def load(self, file):
         
         if self.version in cache:
             if (file == ddragonFiles.champions or file == ddragonFiles.championsFull) and "championById" in cache[self.version]:
@@ -105,11 +126,7 @@ class ddragon(metaclass=Singleton):
         else:
             cache[self.version] = {}
             
-        if self.LOCAL_DIRECTORY == None:
-            data = requests.get(self.BASE_URL + self.version + "/data/" + self.language +"/" + file.value).json()
-        else:
-            with open(self.LOCAL_DIRECTORY + self.version + "/data/" + self.language +"/" + file.value, "r") as f:
-                data = json.load(f)
+        data = await self.get_data(file)
         
         if file == ddragonFiles.champions or file == ddragonFiles.championsFull:
             self.championById = {}
@@ -174,7 +191,7 @@ class ddragon(metaclass=Singleton):
                 icon = Icon(data["data"][i])
                 icon.setImageUrl(self.BASE_URL+ self.version + "/img/")
                 
-                self.iconsById[int(i)] = icon
+                self.iconsById[str(i)] = icon
                 
             cache[self.version]["iconsById"] = copy.deepcopy(self.iconsById)
         
@@ -225,7 +242,7 @@ class ddragon(metaclass=Singleton):
             return self.summonersByName[s]
         
     def getIcon(self, icon):
-        return self.iconsById[int(icon)]
+        return self.iconsById[str(icon)]
     
     def getRune(self, r):
         if isinstance(r, int) or r.isdigit():

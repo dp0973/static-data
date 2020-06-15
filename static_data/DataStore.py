@@ -43,7 +43,7 @@ class Champion(DataStore):
                     "name":s["name"],
                     "id":s["id"]
                 } for s in data["spells"]
-            ]
+            ] if "spells" in  data else []
         }
         
         self.spellById = None
