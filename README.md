@@ -42,6 +42,8 @@ For now, it only corresponds to my use cases, where I need to get name or image 
 Feel free to ask for more.
 
 Versions : 
+ * 0.10.0 : 
+     * Adding id for Champion property
  * 0.9.1 : 
      * Fixed the error with icon "placeholder"
      * moved to asyncio to load data faster

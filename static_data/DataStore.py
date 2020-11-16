@@ -37,6 +37,7 @@ class Champion(DataStore):
         self.data = {
             "image" : data["image"],
             "name" : data["name"],
+            "id":data["key"]
             "spells" : [
                 {
                     "image":s["image"],
