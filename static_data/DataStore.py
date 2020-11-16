@@ -3,7 +3,8 @@ class DataStore():
     def __init__(self, data):
         self.data = {
             "image" : data["image"],
-            "name" : data["name"]
+            "name" : data["name"],
+            "id" : data["image"]["full"].split(".")[0]
         }
         
     def setImageUrl(self, imageUrl):
@@ -21,6 +22,10 @@ class DataStore():
     def name(self):
         return self.data["name"]
     
+    @property
+    def id(self):
+        return self.data["id"]
+    
 
 
 spellToKeyHelper = {
@@ -37,7 +42,7 @@ class Champion(DataStore):
         self.data = {
             "image" : data["image"],
             "name" : data["name"],
-            "id":data["key"]
+            "id":data["key"],
             "spells" : [
                 {
                     "image":s["image"],
@@ -79,7 +84,8 @@ class Champion(DataStore):
         if not self.spellById == None:
             for s in self.spellById:
                 self.spellById[s].setImageUrl(imageUrl)
-            
+                
+    
 
 class Item(DataStore):
     pass

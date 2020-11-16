@@ -5,7 +5,8 @@ dd = static_data.ddragon()
 def test_item_boots():
     
     assert dd.getItem(1001).image[-8:] == "1001.png"
-    assert dd.getItem(1001).name == 'Boots of Speed'
+    assert dd.getItem(1001).name == 'Boots'
+    assert dd.getItem("Boots").id == '1001'
 
 def test_item_bfsword():
     
