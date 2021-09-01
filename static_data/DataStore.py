@@ -25,8 +25,6 @@ class DataStore():
     @property
     def id(self):
         return self.data["id"]
-    
-
 
 spellToKeyHelper = {
     0:"Q",
@@ -42,7 +40,8 @@ class Champion(DataStore):
         self.data = {
             "image" : data["image"],
             "name" : data["name"],
-            "id":data["key"],
+            "id": data["id"],
+            "key": data["key"],
             "spells" : [
                 {
                     "image":s["image"],
@@ -84,9 +83,11 @@ class Champion(DataStore):
         if not self.spellById == None:
             for s in self.spellById:
                 self.spellById[s].setImageUrl(imageUrl)
-                
-    
 
+    @property
+    def key(self):
+        return self.data["key"]
+                
 class Item(DataStore):
     pass
 
@@ -99,7 +100,17 @@ class Map(DataStore):
         }
 
 class Summoner(DataStore):
-    pass
+    def __init__(self, data):
+        self.data = {
+            "image" : data["image"],
+            "name" : data["name"],
+            "id": data["id"],
+            "key": data["key"],
+        }
+    
+    @property
+    def key(self):
+        return self.data["key"]
 
 class Icon(DataStore):
     
