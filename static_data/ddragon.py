@@ -226,7 +226,6 @@ class ddragon(metaclass=Singleton):
 
         if file == ddragonFiles.runes:
             self.runesById = {}
-            self.runesByName = {}
             self.runesByKey = {}
 
             for tree in data:
@@ -234,7 +233,6 @@ class ddragon(metaclass=Singleton):
                 rune.setImageUrl(self.BASE_URL + "img/")
 
                 self.runesById[int(tree["id"])] = rune
-                self.runesByName[tree["name"]] = rune
                 self.runesByKey[tree["key"]] = rune
 
                 for slot in tree["slots"]:
@@ -243,11 +241,9 @@ class ddragon(metaclass=Singleton):
                         rune.setImageUrl(self.BASE_URL + "img/")
 
                         self.runesById[int(r["id"])] = rune
-                        self.runesByName[r["name"]] = rune
                         self.runesByKey[r["key"]] = rune
 
             cache[self.version]["runesById"] = copy.deepcopy(self.runesById)
-            cache[self.version]["runesByName"] = copy.deepcopy(self.runesByName)
             cache[self.version]["runesByKey"] = copy.deepcopy(self.runesByKey)
 
     def getChampion(self, champion):
@@ -281,7 +277,7 @@ class ddragon(metaclass=Singleton):
         if isinstance(r, int) or r.isdigit():
             return self.runesById[int(r)]
         else:
-            return self.runesByName[r]
+            return self.runesByKey[r]
 
     def withVersion(self, season=None, patch=None, version=None):
         inst = copy.copy(self)
